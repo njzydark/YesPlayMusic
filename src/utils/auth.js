@@ -20,8 +20,9 @@ export function isLoggedIn() {
 // 账号登录
 export function isAccountLoggedIn() {
   return (
-    Cookies.get("MUSIC_U") !== undefined &&
-    store.state.data.loginMode === "account"
+    (Cookies.get("MUSIC_U") !== undefined &&
+      store.state.data.loginMode === "account") ||
+    JSON.parse(localStorage.getItem("data"))?.["MUSIC_U"]
   );
 }
 

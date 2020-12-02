@@ -21,6 +21,30 @@ const errors = new Map([
   [-1, "An unexpected error has occurred: "],
 ]);
 
+service.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    const cookie = JSON.parse(localStorage.getItem("data"))?.["MUSIC_U"];
+    if (cookie) {
+      if (config.params) {
+        config.params.cookie = cookie;
+      } else {
+        config.params = { cookie };
+      }
+      if (config.data) {
+        config.data.cookie = cookie;
+      } else {
+        config.data = { cookie };
+      }
+    }
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 service.interceptors.response.use(
   (response) => {
     const res = response.data;

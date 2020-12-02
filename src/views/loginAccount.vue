@@ -190,6 +190,7 @@ export default {
       setMusicU("MUSIC_U", MUSIC_U);
       if (data.code !== 502) {
         this.updateData({ key: "user", value: data.profile });
+        this.updateData({ key: "MUSIC_U", value: MUSIC_U });
         this.afterLogin();
       }
     },
