@@ -69,6 +69,7 @@ module.exports = {
           output: "dist_electron",
         },
         mac: {
+          identity: null,
           category: "public.app-category.music",
           target: "dmg",
           darkModeSupport: true,
