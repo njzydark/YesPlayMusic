@@ -52,11 +52,11 @@ function createWindow() {
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
-    // win.loadURL("app://./index.html");
-    const expressApp = express();
-    expressApp.use("/", express.static(__dirname + "/"));
-    expressApp.listen(27232);
-    win.loadURL("http://localhost:27232");
+    win.loadURL("app://./index.html");
+    // const expressApp = express();
+    // expressApp.use("/", express.static(__dirname + "/"));
+    // expressApp.listen(27232);
+    // win.loadURL("http://localhost:27232");
   }
 
   win.webContents.on("new-window", function (e, url) {
