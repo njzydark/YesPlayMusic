@@ -39,7 +39,7 @@ export default {
       document.title = `${track.name} · ${track.ar[0].name} - YesPlayMusic`;
 
       if (track.playable === false) {
-        const res = ipcRenderer.sendSync("unblock-music", track.id);
+        const res = ipcRenderer.sendSync("unblock-music", track);
         if (res?.url) {
           commitMP3(res.url);
         } else {
