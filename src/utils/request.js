@@ -24,7 +24,7 @@ const errors = new Map([
 service.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    const cookie = JSON.parse(localStorage.getItem("data"))?.["MUSIC_U"];
+    const cookie = JSON.parse(localStorage.getItem("data"))?.["cookie"];
     if (cookie) {
       if (config.params) {
         config.params.cookie = cookie;

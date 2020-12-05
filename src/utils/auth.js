@@ -22,7 +22,7 @@ export function isAccountLoggedIn() {
   return (
     (Cookies.get("MUSIC_U") !== undefined &&
       store.state.data.loginMode === "account") ||
-    JSON.parse(localStorage.getItem("data"))?.["MUSIC_U"]
+    JSON.parse(localStorage.getItem("data"))?.["cookie"]
   );
 }
 
