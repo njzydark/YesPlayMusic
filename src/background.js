@@ -16,6 +16,8 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+// eslint-disable-next-line no-unused-vars
+let tray;
 
 let willQuitApp = false;
 
@@ -43,7 +45,7 @@ function createWindow() {
   win.setMenuBarVisibility(false);
 
   if (process.platform !== "darwin") {
-    createTray(win);
+    tray = createTray(win);
   }
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
