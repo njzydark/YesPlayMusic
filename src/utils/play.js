@@ -3,7 +3,7 @@ import { getAlbum } from "@/api/album";
 import { getPlaylistDetail } from "@/api/playlist";
 import { getArtist } from "@/api/artist";
 
-export function playAList(list, id, type, trackID = "first") {
+export function playAList(list, id, type, trackID = "first", name = "") {
   let filteredList = list.map((id, index) => {
     return { sort: index, id };
   });
@@ -13,7 +13,7 @@ export function playAList(list, id, type, trackID = "first") {
   if (trackID === "first") store.dispatch("playFirstTrackOnList");
   else store.dispatch("playTrackOnListByID", trackID);
 
-  store.commit("updateListInfo", { type, id });
+  store.commit("updateListInfo", { type, id, name });
 }
 
 export function playAlbumByID(id, trackID = "first") {

@@ -121,6 +121,7 @@ import { updateMediaSessionMetaData } from "@/utils/mediaSession";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { isAccountLoggedIn } from "@/utils/auth";
 import { userLikedSongsIDs } from "@/api/user";
+import { personalFmSongs } from "@/api/playlist";
 import { likeATrack } from "@/api/track";
 import "@/assets/css/slider.css";
 import { Howler } from "howler";
@@ -153,6 +154,36 @@ export default {
         this.updateLikedSongs(data.ids);
       });
     }
+  },
+  watch: {
+    "player.currentTrack": function () {
+      const { currentTrack, list = [], listInfo } = this.player;
+      if (listInfo.name !== "personalFmSongs") {
+        return;
+      }
+      const reverseList = [...list].reverse();
+      const curIndex = reverseList.findIndex(
+        (item) => item.id === currentTrack.id
+      );
+      if (curIndex === 0) {
+        console.log("update personal fm songs");
+        const curSort = reverseList[0].sort;
+        personalFmSongs().then((data) => {
+          const songs = data.data || [];
+          const tracks = songs.reduce(
+            (pre, cur, index) => {
+              pre.push({
+                sort: curSort + index + 1,
+                id: cur.id,
+              });
+              return pre;
+            },
+            [{ sort: curSort, id: currentTrack.id }]
+          );
+          this.updatePlayerList(tracks);
+        });
+      }
+    },
   },
   computed: {
     ...mapState(["player", "howler", "settings", "liked", "data"]),
@@ -196,6 +227,7 @@ export default {
       "updatePlayerState",
       "updateRepeatStatus",
       "updateLikedSongs",
+      "updatePlayerList",
     ]),
     ...mapActions([
       "nextTrack",
@@ -279,6 +311,10 @@ export default {
       });
     },
     goToList() {
+      const listInfoName = this.player.listInfo?.name || "";
+      if (listInfoName === "dailySongs" || listInfoName === "personalFmSongs") {
+        return;
+      }
       if (this.player.listInfo.id === this.data.likedSongPlaylistID)
         this.$router.push({ path: "/library/liked-songs" });
       else

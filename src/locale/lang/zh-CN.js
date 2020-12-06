@@ -17,6 +17,8 @@ export default {
     sLibrary: "的音乐库",
     likedSongs: "我喜欢的歌",
     sLikedSongs: "喜欢的歌",
+    dailyRecommend: "每日推荐",
+    personalFm: "私人 FM",
   },
   explore: {
     explore: "发现",

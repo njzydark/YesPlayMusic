@@ -20,6 +20,8 @@ export default {
     sLibrary: "'s Library",
     likedSongs: "Liked Songs",
     sLikedSongs: "'s Liked Songs",
+    dailyRecommend: "Daily Recommend",
+    personalFm: "Personal FM",
   },
   explore: {
     explore: "Explore",

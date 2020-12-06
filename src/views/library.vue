@@ -29,6 +29,31 @@
           </button>
         </div>
       </div>
+      <div class="daily-songs-wrapper">
+        <div class="liked-songs">
+          <div class="bottom">
+            <div class="titles">
+              <div class="title">{{ $t("library.personalFm") }}</div>
+            </div>
+            <button @click.stop="playPersonalSongs">
+              <svg-icon icon-class="play" />
+            </button>
+          </div>
+        </div>
+        <div class="liked-songs">
+          <div class="bottom">
+            <div class="titles">
+              <div class="title">{{ $t("library.dailyRecommend") }}</div>
+              <div class="sub-title">
+                {{ dailySongs.length }} {{ $t("common.songs") }}
+              </div>
+            </div>
+            <button @click.stop="playDailySongs">
+              <svg-icon icon-class="play" />
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="songs">
         <TrackList
           :tracks="likedSongs"
@@ -114,8 +139,12 @@ import {
   likedMVs,
 } from "@/api/user";
 import { randomNum, dailyTask } from "@/utils/common";
-import { getPlaylistDetail } from "@/api/playlist";
-import { playPlaylistByID } from "@/utils/play";
+import {
+  getPlaylistDetail,
+  dailyRecommendDailySongs,
+  personalFmSongs,
+} from "@/api/playlist";
+import { playPlaylistByID, playAList } from "@/utils/play";
 import NProgress from "nprogress";
 
 import TrackList from "@/components/TrackList.vue";
@@ -137,6 +166,8 @@ export default {
       },
       likedSongs: [],
       likedSongIDs: [],
+      dailySongs: [],
+      personalFmSongs: [],
       lyric: undefined,
       currentTab: "playlists",
       albums: [],
@@ -183,6 +214,14 @@ export default {
     playLikedSongs() {
       playPlaylistByID(this.playlists[0].id, "first", true);
     },
+    playDailySongs() {
+      let trackIDs = this.dailySongs.map((t) => t.id);
+      playAList(trackIDs, "", "playlist", "first", "dailySongs");
+    },
+    playPersonalSongs() {
+      const trackIDs = this.personalFmSongs.map((t) => t.id);
+      playAList(trackIDs, "", "playlist", "first", "personalFmSongs");
+    },
     updateCurrentTab(tab) {
       this.currentTab = tab;
       document
@@ -211,6 +250,8 @@ export default {
         this.loadLikedMVs();
       }
       this.getLikedSongs();
+      this.getDailSongs();
+      this.getPersonalSongs();
     },
     getUserPlaylists(replace = false) {
       userPlaylist({
@@ -237,6 +278,16 @@ export default {
           this.show = true;
         });
         if (getLyric) this.getRandomLyric();
+      });
+    },
+    getDailSongs() {
+      dailyRecommendDailySongs().then((data) => {
+        this.dailySongs = data?.data?.dailySongs || [];
+      });
+    },
+    getPersonalSongs() {
+      personalFmSongs().then((data) => {
+        this.personalFmSongs = data?.data || [];
       });
     },
     getRandomLyric() {
@@ -292,17 +343,23 @@ h1 {
 .section-one {
   display: flex;
   margin-top: 24px;
+
+  .daily-songs-wrapper {
+    margin: 0 12px;
+    .liked-songs {
+      height: 103px;
+    }
+  }
+
   .songs {
     flex: 7;
     margin-top: 8px;
-    margin-left: 36px;
     height: 216px;
-    overflow: hidden;
+    overflow: auto;
   }
 }
 
 .liked-songs {
-  flex: 3;
   margin-top: 8px;
   cursor: pointer;
   height: 216px;
