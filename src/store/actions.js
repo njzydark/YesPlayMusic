@@ -62,11 +62,12 @@ export default {
       }
 
       function getMP3(id) {
-        getMP3Api(id).then((data) => {
+        return getMP3Api(id).then((data) => {
           // 未知情况下会没有返回数据导致报错，增加防范逻辑
           if (data.data[0]) {
             const url = updateHttps(data.data[0].url);
             commitMP3(url);
+            return url;
           }
         });
       }
@@ -83,10 +84,14 @@ export default {
                 const blob = new Blob([t.mp3]);
                 commitMP3(URL.createObjectURL(blob));
               } else {
-                cacheTrack(`${track.id}`, unblockSongUrl).then((t) => {
-                  const blob = new Blob([t.mp3]);
-                  commitMP3(URL.createObjectURL(blob));
-                });
+                if (unblockSongUrl) {
+                  commitMP3(unblockSongUrl);
+                  cacheTrack(`${track.id}`, unblockSongUrl);
+                } else {
+                  getMP3(track.id).then((url) => {
+                    cacheTrack(`${track.id}`, url);
+                  });
+                }
               }
             })
             .catch((err) => {
