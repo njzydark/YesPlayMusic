@@ -40,17 +40,18 @@ export default {
       updateMediaSessionMetaData(track);
       document.title = `${track.name} · ${track.ar[0].name} - YesPlayMusic`;
 
+      let unblockSongUrl = null;
       if (track.playable === false) {
         let res = undefined;
         if (process.env.IS_ELECTRON === true) {
           res = ipcRenderer.sendSync("unblock-music", track);
         }
         if (res?.url) {
-          commitMP3(res.url);
+          unblockSongUrl = res.url;
         } else {
           dispatch("nextTrack");
+          return;
         }
-        return;
       }
 
       function commitMP3(mp3) {
@@ -82,7 +83,7 @@ export default {
                 const blob = new Blob([t.mp3]);
                 commitMP3(URL.createObjectURL(blob));
               } else {
-                cacheTrack(`${track.id}`).then((t) => {
+                cacheTrack(`${track.id}`, unblockSongUrl).then((t) => {
                   const blob = new Blob([t.mp3]);
                   commitMP3(URL.createObjectURL(blob));
                 });
@@ -90,13 +91,20 @@ export default {
             })
             .catch((err) => {
               console.log(err.messaeg);
-              getMP3(track.id);
+              if (unblockSongUrl) {
+                commitMP3(unblockSongUrl);
+              } else {
+                getMP3(track.id);
+              }
             });
         } else {
           getMP3(track.id);
         }
       } else {
-        commitMP3(`https://music.163.com/song/media/outer/url?id=${track.id}`);
+        commitMP3(
+          unblockSongUrl ||
+            `https://music.163.com/song/media/outer/url?id=${track.id}`
+        );
       }
     });
   },

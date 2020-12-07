@@ -2,7 +2,7 @@ import axios from "axios";
 import localforage from "localforage";
 import { getMP3 } from "@/api/track";
 
-export function cacheTrack(id) {
+export function cacheTrack(id, unblockSongUrl) {
   let tracks = localforage.createInstance({
     name: "tracks",
   });
@@ -19,7 +19,7 @@ export function cacheTrack(id) {
   // TODO: cache track details
   return getMP3(id).then((data) => {
     return axios
-      .get(data.data[0].url.replace(/^http:/, "https:"), {
+      .get(unblockSongUrl || data.data[0].url.replace(/^http:/, "https:"), {
         responseType: "arraybuffer",
       })
       .then((response) => {
