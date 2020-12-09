@@ -1,5 +1,8 @@
 export default {
-  play: "播放",
+  common: {
+    play: "播放",
+    songs: "首歌",
+  },
   nav: {
     home: "首页",
     explore: "发现",
@@ -15,8 +18,8 @@ export default {
   },
   library: {
     sLibrary: "的音乐库",
-    likedSongs: "我喜欢的歌",
-    sLikedSongs: "喜欢的歌",
+    likedSongs: "我喜欢的音乐",
+    sLikedSongs: "喜欢的音乐",
     dailyRecommend: "每日推荐",
     personalFm: "私人 FM",
   },
@@ -101,9 +104,6 @@ export default {
     noResult: "暂无结果",
     searchFor: "搜索",
   },
-  common: {
-    songs: "首歌",
-  },
   settings: {
     settings: "设置",
     logout: "登出",
@@ -121,5 +121,15 @@ export default {
       light: "浅色",
       dark: "深色",
     },
+  },
+  contextMenu: {
+    play: "播放",
+    playNext: "下一首播放",
+    saveToMyLikedSongs: "添加到我喜欢的音乐",
+    removeFromMyLikedSongs: "从喜欢的音乐中移除",
+  },
+  toast: {
+    savedToMyLikedSongs: "已添加到我喜欢的音乐",
+    removedFromMyLikedSongs: "已从喜欢的音乐中移除",
   },
 };
