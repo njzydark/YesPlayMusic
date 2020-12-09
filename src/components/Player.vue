@@ -37,7 +37,7 @@
           </div>
         </div>
         <!-- 账号登录才会显示 like 图标 -->
-        <div class="like-button" v-show="accountLogin">
+        <div class="like-button">
           <button-icon
             @click.native="likeCurrentSong"
             :title="$t('player.like')"
@@ -220,9 +220,6 @@ export default {
       let max = ~~(this.currentTrack.dt / 1000);
       return max > 1 ? max - 1 : max;
     },
-    accountLogin() {
-      return isAccountLoggedIn();
-    },
   },
   methods: {
     ...mapMutations([
@@ -238,6 +235,7 @@ export default {
       "previousTrack",
       "playTrackOnListByID",
       "addNextTrackEvent",
+      "showToast",
     ]),
     play() {
       if (this.playing) {
@@ -301,6 +299,10 @@ export default {
       return `${min}:${sec}`;
     },
     likeCurrentSong() {
+      if (!isAccountLoggedIn()) {
+        this.showToast("此操作需要登录网易云账号");
+        return;
+      }
       let id = this.currentTrack.id;
       let like = true;
       if (this.liked.songs.includes(id)) like = false;
