@@ -5,11 +5,10 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { startNeteaseMusicApi } from "./electron/services";
 import { initIpcMain } from "./electron/ipcMain.js";
 import { createMenu } from "./electron/menu";
-import { createTouchBar } from "./electron/touchBar";
+import { createTouchBar } from "./electron/touchbar";
 import { createDockMenu } from "./electron/dockMenu";
 import { createTray } from "./electron/tray.js";
 import { autoUpdater } from "electron-updater";
-import express from "express";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 

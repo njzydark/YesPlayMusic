@@ -1,3 +1,4 @@
+/* global __static */
 const { TouchBar, nativeImage, ipcMain } = require("electron");
 const path = require("path");
 
